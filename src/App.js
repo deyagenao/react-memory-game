@@ -16,33 +16,52 @@ class App extends React.Component {
     pastSelections: []
   }
 
-  handleCardClick = () => {
-    // const cardId 
+  handleCardClick = id => {
     // check if inside past selection
     // call correct / incorrect
+    this.state.pastSelections.includes(id) ? 
+      this.incorrect() :
+      this.correct(id) 
+    
   }
 
-  correct = () =>{
+  correct = id =>{
+    console.log('well done');
     // score up
-    this.setState({
-      score: this.state.score + 1
-    })
     // msg change
+    this.state.pastSelections.push(id);
+    this.setState({
+      score: this.state.score + 1,
+      message: 'Correct! Keep it up!'
+    })
+    
     // call shuffle
+    this.shuffle(this.state.images);
   }
 
   incorrect = () =>{
+    console.log('alright buddy');
     // reset score to 0 
-    this.setState({
-      score: 0
-    })
     // msg change
-    // call shuffle
+    this.setState({
+      score: 0,
+      message: 'Wrong! Time to start over!',
+    });
+    
+    this.shuffle(this.state.images);
 
   }
-  shuffle = () => {
-    // rearage cards
+  shuffle = imagesArray => {
+    // rearrange cards
     // set to state
+    for (let i = imagesArray.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [imagesArray[i], imagesArray[j]] = [
+        imagesArray[j],
+        imagesArray[i]
+      ];
+    };
+    this.setState({images: imagesArray});
   }
   
   render() {
